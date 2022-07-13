@@ -2,6 +2,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.charset.Charset;
+import java.util.Iterator;
 
 public class ServerReceive {
     AsynchronousSocketChannel asynchronousSocketChannel;
@@ -22,14 +23,16 @@ public class ServerReceive {
                             String data = charset.decode(attachment).toString();
                             System.out.println(data);
 
-                            for (ClientConnection cc : Server.connections) {
+                            Iterator<ClientConnection> iterator = Server.connections.iterator();
+                            while(iterator.hasNext()){  // 객체가 있는지 확인
+                                ClientConnection cc = iterator.next();
                                 cc.send(data);
                             }
 
                             ByteBuffer byteBuffer = ByteBuffer.allocate(100);
                             asynchronousSocketChannel.read(byteBuffer, byteBuffer, this); // 자신 호출
 
-                        } catch (Exception e) {throw new RuntimeException(e);}
+                        } catch (Exception e) {}
                     }
 
                     @Override

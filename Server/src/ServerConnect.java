@@ -4,6 +4,8 @@ import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.concurrent.Executors;
 
 public class ServerConnect {
@@ -31,9 +33,23 @@ public class ServerConnect {
                         ClientConnection cc = new ClientConnection(asynchronousSocketChannel);
                         Server.connections.add(cc);
 
-                        for(ClientConnection clientConnection : Server.connections) {
-                            if (clientConnection != cc)
-                                clientConnection.send("낯선 상대가 접속 했습니다");
+                        try {
+                            Iterator<ClientConnection> iterator = Server.connections.iterator();
+                            while(iterator.hasNext()){  // 객체가 있는지 확인
+                                ClientConnection clientConnection = iterator.next();
+                                if (clientConnection != cc) {
+                                    clientConnection.send("낯선 사람이 입장했습니다");
+                                }
+                            }
+
+                        } catch (ConcurrentModificationException e) {
+                            Iterator<ClientConnection> iterator = Server.connections.iterator();
+                            while(iterator.hasNext()){  // 객체가 있는지 확인
+                                ClientConnection clientConnection = iterator.next();
+                                if (clientConnection != cc) {
+                                    clientConnection.send("낯선 사람이 입장했습니다");
+                                }
+                            }
                         }
 
                         Server.asynchronousServerSocketChannel.accept(null, this);
