@@ -31,8 +31,10 @@ public class ServerConnect {
                         ClientConnection cc = new ClientConnection(asynchronousSocketChannel);
                         Server.connections.add(cc);
 
-                        int numUsers = Server.connections.size();
-                        cc.send(numUsers + "명 접속중");
+                        for(ClientConnection clientConnection : Server.connections) {
+                            if (clientConnection != cc)
+                                clientConnection.send("낯선 상대가 접속 했습니다");
+                        }
 
                         Server.asynchronousServerSocketChannel.accept(null, this);
                     }

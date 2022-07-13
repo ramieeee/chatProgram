@@ -35,8 +35,8 @@ public class Client {
         System.out.print("Type your ID: ");
         Scanner sc = new Scanner(System.in);
         String ID = sc.nextLine();
-
-        asynchronousSocketChannel.connect(new InetSocketAddress("localhost", 5001), null,
+//"141.144.255.103"
+        asynchronousSocketChannel.connect(new InetSocketAddress("141.144.255.103", 5001), null,
                 new CompletionHandler<Void, Void>() {
                     @Override
                     public void completed(Void result, Void attachment) {

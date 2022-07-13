@@ -27,7 +27,9 @@ public class ClientConnection {
 
                     @Override
                     public void failed(Throwable exc, Void attachment) {
-                        System.out.println("발신 실패");
+                        System.out.println("발신 실패 객체 삭제");
+                        Server.connections.remove(ClientConnection.this);
+                        ServerReceive.messageSentCheckFlag = 1;
                     }
                 });
     }

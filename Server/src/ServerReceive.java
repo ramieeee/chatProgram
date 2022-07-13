@@ -1,10 +1,10 @@
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.charset.Charset;
 
 public class ServerReceive {
+    static int messageSentCheckFlag = 0;
     AsynchronousSocketChannel asynchronousSocketChannel;
     ServerReceive(AsynchronousSocketChannel asynchronousSocketChannel) {
         this.asynchronousSocketChannel = asynchronousSocketChannel;
@@ -27,8 +27,15 @@ public class ServerReceive {
                                 cc.send(data);
                             }
 
+                            if (messageSentCheckFlag == 1) {
+                                for (ClientConnection cc : Server.connections) {
+                                    cc.send(data);
+                                }
+                                messageSentCheckFlag = 0;
+                            }
                             ByteBuffer byteBuffer = ByteBuffer.allocate(100);
                             asynchronousSocketChannel.read(byteBuffer, byteBuffer, this); // 자신 호출
+
                         } catch (Exception e) {throw new RuntimeException(e);}
                     }
 
