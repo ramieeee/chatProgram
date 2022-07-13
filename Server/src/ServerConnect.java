@@ -41,16 +41,7 @@ public class ServerConnect {
                                     clientConnection.send("낯선 사람이 입장했습니다");
                                 }
                             }
-
-                        } catch (ConcurrentModificationException e) {
-                            Iterator<ClientConnection> iterator = Server.connections.iterator();
-                            while(iterator.hasNext()){  // 객체가 있는지 확인
-                                ClientConnection clientConnection = iterator.next();
-                                if (clientConnection != cc) {
-                                    clientConnection.send("낯선 사람이 입장했습니다");
-                                }
-                            }
-                        }
+                        } catch (ConcurrentModificationException e) {}
 
                         Server.asynchronousServerSocketChannel.accept(null, this);
                     }

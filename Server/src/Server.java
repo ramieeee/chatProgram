@@ -7,7 +7,7 @@ import java.util.Vector;
 public class Server {
     public static AsynchronousChannelGroup channelGroup;
     public static AsynchronousServerSocketChannel asynchronousServerSocketChannel;
-    public static List<ClientConnection> connections = new Vector<ClientConnection>();
+    public static List<ClientConnection> connections = new LinkedList<>();
 
     public static void main(String[] args) throws Exception{
         System.out.println("서버 실행");
